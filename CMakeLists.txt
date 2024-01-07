@@ -38,6 +38,8 @@ add_executable(server
 		src/CrudController.hpp
 		src/Router.cpp
 		src/Router.hpp
+		src/RouteId.cpp
+		src/RouteId.hpp
 )
 
 target_link_libraries(

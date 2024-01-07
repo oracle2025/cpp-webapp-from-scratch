@@ -18,13 +18,15 @@ void SimpleRequestHandler::handleRequest(HTTPServerRequest& request, HTTPServerR
     const auto valid_paths = {"/", "/new", "/create", "/edit", "/update", "/delete"};
     const auto path = URI(request.getURI()).getPath();
 
-    for (const auto& route : valid_paths) {
-	    if (path == route) {
-		    response.setChunkedTransferEncoding(true);
-		    response.setContentType("text/html");
-		    IndexTemplate indexTemplate;
-		    indexTemplate.setTitle(path.c_str());
-		    indexTemplate.setContent(R"(
+    for (const auto& route : valid_paths)
+    {
+        if (path == route)
+        {
+            response.setChunkedTransferEncoding(true);
+            response.setContentType("text/html");
+            IndexTemplate indexTemplate;
+            indexTemplate.setTitle(path.c_str());
+            indexTemplate.setContent(R"(
 <ul>
 	<li><a href="/">Home</a></li>
 	<li><a href="/new">New</a></li>
@@ -34,10 +36,10 @@ void SimpleRequestHandler::handleRequest(HTTPServerRequest& request, HTTPServerR
 	<li><a href="/delete">Delete</a></li>
 </ul>
 )");
-		    indexTemplate.render(response.send());
+            indexTemplate.render(response.send());
 
-		    return;
-	    }
+            return;
+        }
     }
     response.setStatus(Poco::Net::HTTPResponse::HTTP_METHOD_NOT_ALLOWED);
     response.send() << "Method Not Allowed\n";
