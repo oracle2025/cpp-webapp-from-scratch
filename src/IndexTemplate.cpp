@@ -1,5 +1,6 @@
 #include "IndexTemplate.hpp"
 #include <string>
+#include <ostream>
 
 struct IndexTemplate::Impl
 {
