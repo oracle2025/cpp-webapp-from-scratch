@@ -3,7 +3,11 @@ project(cpp-webapp-from-scratch)
 
 find_package(Poco REQUIRED COMPONENTS Net Util Data DataSQLite)
 
-add_executable(server src/server_main.cpp)
+add_executable(server
+	src/server_main.cpp
+	src/SimpleRequestHandler.cpp
+	src/SimpleRequestHandler.hpp
+	)
 
 target_link_libraries(
 	server
