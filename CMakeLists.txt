@@ -34,6 +34,10 @@ add_executable(server
 	src/SimpleRequestHandler.hpp
 		src/IndexTemplate.cpp
 		src/IndexTemplate.hpp
+		src/CrudController.cpp
+		src/CrudController.hpp
+		src/Router.cpp
+		src/Router.hpp
 )
 
 target_link_libraries(
