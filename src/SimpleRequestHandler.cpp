@@ -3,6 +3,7 @@
 #include <iostream>
 #include <Poco/Net/HTTPServerRequest.h>
 #include <Poco/Net/HTTPServerResponse.h>
+#include "IndexTemplate.hpp"
 
 struct SimpleRequestHandler::Impl
 {
@@ -13,7 +14,10 @@ void SimpleRequestHandler::handleRequest(HTTPServerRequest& request, HTTPServerR
     std::cout << "Handle Request: " << request.getURI() << "\n";
     response.setChunkedTransferEncoding(true);
     response.setContentType("text/html");
-    response.send() << "<h1>Hello World</h1>\n";
+    IndexTemplate indexTemplate;
+    indexTemplate.setTitle("Hello");
+    indexTemplate.setContent("World");
+    indexTemplate.render(response.send());
 }
 
 SimpleRequestHandler::SimpleRequestHandler():

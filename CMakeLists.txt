@@ -32,7 +32,9 @@ add_executable(server
 	src/server_main.cpp
 	src/SimpleRequestHandler.cpp
 	src/SimpleRequestHandler.hpp
-	)
+		src/IndexTemplate.cpp
+		src/IndexTemplate.hpp
+)
 
 target_link_libraries(
 	server
