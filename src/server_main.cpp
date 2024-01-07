@@ -33,30 +33,14 @@ struct HandlerFactory : public HTTPRequestHandlerFactory {
 	}
 };
 
-using Poco::Net::HTTPServer;
-struct WebServer {
-	void start()
-	{
-		std::cout << "Starting ...\n";
-		using namespace Poco::Net;
-		ServerSocket socket(SocketAddress(Poco::Net::IPAddress("127.0.0.1"), 8080));
-		auto params = new HTTPServerParams;
-		params->setServerName("localhost:8080");
-		server = std::make_shared<HTTPServer>(new HandlerFactory, socket, params);
-		server->start();
-	}
-	void stop()
-	{
-		server->stop();
-	}
-	std::shared_ptr<HTTPServer> server;
-};
 
 using Poco::Util::ServerApplication;
 struct App : public ServerApplication {
 	int main(const vector<string>& args) override
 	{
-		WebServer server;
+		using namespace Poco::Net;
+		ServerSocket socket(SocketAddress("localhost", 8080));
+		HTTPServer server(new HandlerFactory, socket, new HTTPServerParams);
 		server.start();
 		waitForTerminationRequest();
 		server.stop();
