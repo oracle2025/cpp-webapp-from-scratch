@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <iostream>
 #include <Poco/Util/ServerApplication.h>
 #include <Poco/Net/HTTPServer.h>
 #include <Poco/Net/HTTPServerRequest.h>
@@ -42,9 +43,11 @@ struct WebServer {
 		auto params = new HTTPServerParams;
 		params->setServerName("localhost:8080");
 		server = std::make_shared<HTTPServer>(new HandlerFactory, socket, params);
+		server->start();
 	}
 	void stop()
 	{
+		server->stop();
 	}
 	std::shared_ptr<HTTPServer> server;
 };
