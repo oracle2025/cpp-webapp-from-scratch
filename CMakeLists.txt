@@ -40,6 +40,8 @@ add_executable(server
 		src/Router.hpp
 		src/RouteId.cpp
 		src/RouteId.hpp
+		src/HomeTemplate.cpp
+		src/HomeTemplate.hpp
 )
 
 target_link_libraries(

@@ -29,10 +29,16 @@ CrudController::CrudController(Router& router)
          * indexTemplate.setContent(listTemplate.render());
          * indexTemplate.render(response.send());
          */
+        response.setChunkedTransferEncoding(true);
+        response.setContentType("text/html");
+        response.send() << R"(Crud Index)";
     });
     router.add("/new", [](HTTPServerRequest& request, HTTPServerResponse& response)
     {
         //CrudNewTemplate
+        response.setChunkedTransferEncoding(true);
+        response.setContentType("text/html");
+        response.send() << R"(Crud Index)";
     });
     router.add("/create", [](HTTPServerRequest& request, HTTPServerResponse& response)
     {

@@ -6,7 +6,9 @@
 #include <Poco/Net/HTTPServerResponse.h>
 #include <Poco/Net/HTTPRequestHandler.h>
 
+#include "CrudController.hpp"
 #include "SimpleRequestHandler.hpp"
+#include "Router.hpp"
 
 using std::vector;
 using std::string;
@@ -17,6 +19,10 @@ struct RequestHandler : public HTTPRequestHandler
 {
     using HTTPServerRequest = Poco::Net::HTTPServerRequest;
     using HTTPServerResponse = Poco::Net::HTTPServerResponse;
+
+    explicit RequestHandler(Router& router): handler(router)
+    {
+    }
 
     void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response) override
     {
@@ -33,11 +39,18 @@ struct HandlerFactory : public HTTPRequestHandlerFactory
     using HTTPRequestHandler = Poco::Net::HTTPRequestHandler;
     using HTTPServerRequest = Poco::Net::HTTPServerRequest;
 
+    explicit HandlerFactory(Router& router): router(router)
+    {
+    }
+
     HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request) override
     {
         std::cout << "Request: " << request.getURI() << "\n";
-        return new RequestHandler;
+        return new RequestHandler(router);
     }
+
+private:
+    Router& router;
 };
 
 
@@ -49,7 +62,9 @@ struct App : public ServerApplication
     {
         using namespace Poco::Net;
         ServerSocket socket(SocketAddress("localhost", 8080));
-        HTTPServer server(new HandlerFactory, socket, new HTTPServerParams);
+        Router router;
+        CrudController crud(router);
+        HTTPServer server(new HandlerFactory(router), socket, new HTTPServerParams);
         server.start();
         waitForTerminationRequest();
         server.stop();

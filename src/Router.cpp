@@ -2,6 +2,10 @@
 
 #include <map>
 #include <string>
+#include <Poco/URI.h>
+#include <Poco/Net/HTTPResponse.h>
+#include <Poco/Net/HTTPServerRequest.h>
+#include <Poco/Net/HTTPServerResponse.h>
 
 #include "RouteId.hpp"
 
@@ -24,4 +28,19 @@ Router::~Router()
 {
     delete impl;
     impl = nullptr;
+}
+
+void Router::handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
+{
+    using Poco::URI;
+    const auto path = URI(request.getURI()).getPath();
+
+    auto it = impl->routes.find(RouteId(path));
+    if (it == impl->routes.end())
+    {
+        response.setStatus(Poco::Net::HTTPResponse::HTTP_NOT_FOUND);
+        response.send();
+        return;
+    }
+    it->second(request, response);
 }

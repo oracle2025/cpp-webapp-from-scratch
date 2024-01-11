@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include <iosfwd>
 
 namespace Poco
 {
@@ -19,6 +20,10 @@ struct Router
     void add(const std::string& path, handler_type handler);
     Router();
     ~Router();
+    Router(const Router&) = delete;
+    Router& operator=(const Router&) = delete;
+
+    void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response);
 
 private:
     struct Impl;

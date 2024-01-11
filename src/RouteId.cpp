@@ -1,39 +1,23 @@
 #include "RouteId.hpp"
 #include <string>
 
-struct RouteId::Impl
-{
-    Method method = Method::GET;
-    std::string path;
-};
-
 RouteId::RouteId(const Method& method, std::string path)
-    :
-    impl(new Impl)
+    : method(method), path(std::move(path))
 {
-    impl->method = method;
-    impl->path = std::move(path);
 }
 
 RouteId::RouteId(std::string path)
     :
-    impl(new Impl)
+    path(std::move(path))
 {
-    impl->path = std::move(path);
-}
-
-RouteId::~RouteId()
-{
-    delete impl;
-    impl = nullptr;
 }
 
 
 bool RouteId::operator<(const RouteId& rhs) const
 {
-    if (impl->method != rhs.impl->method)
+    if (method != rhs.method)
     {
-        return impl->method < rhs.impl->method;
+        return method < rhs.method;
     }
-    return impl->path < rhs.impl->path;
+    return path < rhs.path;
 }

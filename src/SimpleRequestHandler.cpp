@@ -5,9 +5,15 @@
 #include <Poco/Net/HTTPServerResponse.h>
 #include <Poco/URI.h>
 #include "IndexTemplate.hpp"
+#include "Router.hpp"
 
 struct SimpleRequestHandler::Impl
 {
+    Impl(Router& router): router(router)
+    {
+    }
+
+    Router& router;
 };
 
 void SimpleRequestHandler::handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
@@ -20,6 +26,7 @@ void SimpleRequestHandler::handleRequest(HTTPServerRequest& request, HTTPServerR
 
     for (const auto& route : valid_paths)
     {
+        continue;
         if (path == route)
         {
             response.setChunkedTransferEncoding(true);
@@ -41,12 +48,11 @@ void SimpleRequestHandler::handleRequest(HTTPServerRequest& request, HTTPServerR
             return;
         }
     }
-    response.setStatus(Poco::Net::HTTPResponse::HTTP_METHOD_NOT_ALLOWED);
-    response.send() << "Method Not Allowed\n";
+    impl->router.handleRequest(request, response);
 }
 
-SimpleRequestHandler::SimpleRequestHandler():
-    impl(new Impl)
+SimpleRequestHandler::SimpleRequestHandler(Router& router):
+    impl(new Impl(router))
 {
 }
 
